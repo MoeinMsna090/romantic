@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>یک دعوت خاص ❤️</title>
+  
+  <!-- فونت زیبای وزیرمتن -->
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+  
+  <!-- کتابخانه EmailJS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      // مقداردهی اولیه EmailJS
+      emailjs.init("_i7yAv69fm4YRiyMc");
+    })();
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffe5ec 0%, #e8f0fe 50%, #f4e8ff 100%);
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* انیمیشن پس‌زمینه شناور (قلب‌ها) */
+    .bg-hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      color: rgba(255, 182, 193, 0.45);
+      font-size: 24px;
+      animation: floatUp 12s infinite linear;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* کارت شیشه‌ای (Glassmorphism) */
+    .glass-card {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 28px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 40px rgba(255, 182, 193, 0.25), 
+                  0 10px 20px rgba(173, 216, 230, 0.2);
+      text-align: center;
+      transition: all 0.5s ease-in-out;
+    }
+
+    /* دکمه بازگشت */
+    .back-btn {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      color: #6c757d;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: none; /* در سوال اول مخفی است */
+    }
+
+    .back-btn:hover {
+      background: #ffffff;
+      color: #ff758f;
+      transform: translateX(3px);
+    }
+
+    /* استایل انتقال سوالات */
+    .question-step {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .question-step.fade-out {
+      opacity: 0;
+      transform: translateY(-15px);
+    }
+
+    .question-step.fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      color: #4a4e69;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    /* چیدمان گزینه‌ها */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 15px;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-height: 60px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      color: #5c5470;
+      padding: 14px 24px;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                  opacity 0.35s ease, 
+                  background-color 0.3s ease, 
+                  box-shadow 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      outline: none;
+      width: 100%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .btn:hover {
+      background: #ffffff;
+      color: #ff758f;
+      box-shadow: 0 8px 20px rgba(255, 117, 143, 0.2);
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      color: #581825;
+      border: none;
+      z-index: 2;
+      transform-origin: center center;
+    }
+
+    .btn-no {
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 1;
+      transform-origin: center center;
+    }
+
+    .glass-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(5px);
+      font-size: 0.95rem;
+      color: #4a4e69;
+      outline: none;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .glass-input:focus {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: #ff9a9e;
+      box-shadow: 0 0 12px rgba(255, 154, 158, 0.3);
+    }
+
+    .note-text {
+      font-size: 0.8rem;
+      color: #8d99ae;
+      margin-top: 4px;
+      margin-bottom: 15px;
+    }
+
+    .final-card {
+      color: #ff4d6d;
+      font-size: 1.3rem;
+      font-weight: bold;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- پس‌زمینه انیمیشنی -->
+  <div class="bg-hearts" id="heartsContainer"></div>
+
+  <!-- کارت اصلی شیشه‌ای -->
+  <div class="glass-card">
+    <button class="back-btn" id="backBtn" onclick="goBack()">👉 بازگشت</button>
+    <div id="contentBox" class="question-step">
+      <!-- محتوا به صورت پویا جایگزین می‌شود -->
+    </div>
+  </div>
+
+  <script>
+    let userResponses = {
+      location: "",
+      day: "",
+      time: ""
+    };
+
+    // تاریخچه مراحل برای سیستم بازگشت
+    let historyStack = [];
+
+    // انیمیشن قلب‌ها
+    const heartsContainer = document.getElementById('heartsContainer');
+    const heartIcons = ['🌸', '✨', '💗', '💖', '☁️'];
+    
+    for (let i = 0; i < 18; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDelay = Math.random() * 10 + 's';
+      heart.style.animationDuration = (8 + Math.random() * 6) + 's';
+      heart.style.fontSize = (16 + Math.random() * 16) + 'px';
+      heartsContainer.appendChild(heart);
+    }
+
+    let noClickCount = 0;
+    let yesScale = 1;
+    let noScale = 1;
+
+    const contentBox = document.getElementById('contentBox');
+    const backBtn = document.getElementById('backBtn');
+
+    // تابع تعویض سوالات
+    function renderStep(htmlContent, stepName) {
+      // مدیریت دکمه بازگشت
+      if (stepName === 'step1') {
+        historyStack = ['step1'];
+        backBtn.style.display = 'none';
+      } else {
+        if (historyStack[historyStack.length - 1] !== stepName) {
+          historyStack.push(stepName);
+        }
+        backBtn.style.display = 'block';
+      }
+
+      contentBox.classList.add('fade-out');
+      setTimeout(() => {
+        contentBox.innerHTML = htmlContent;
+        contentBox.classList.remove('fade-out');
+        contentBox.classList.add('fade-in');
+        setTimeout(() => contentBox.classList.remove('fade-in'), 500);
+      }, 400);
+    }
+
+    // عملکرد دکمه بازگشت
+    function goBack() {
+      if (historyStack.length > 1) {
+        historyStack.pop(); // حذف مرحله فعلی
+        const previousStep = historyStack[historyStack.length - 1];
+        
+        // هدایت به مرحله قبل
+        if (previousStep === 'step1') showStep1(true);
+        else if (previousStep === 'step2') showStep2(true);
+        else if (previousStep === 'subLocation') showStep2(true); // اگر در جزییات مکان بود، برگرد به منوی مکان‌ها
+        else if (previousStep === 'stepDays') showStepDays(true);
+      }
+    }
+
+    // سوال ۱
+    function showStep1(isBack = false) {
+      noClickCount = 0;
+      yesScale = 1;
+      noScale = 1;
+
+      const html = `
+        <h2>آیا تمایل داری با من بیرون بیای؟ 🥺</h2>
+        <div class="btn-row" id="btnGroup">
+          <button class="btn btn-yes" id="btnYes" onclick="showStep2()">آره</button>
+          <button class="btn btn-no" id="btnNo" onclick="handleNoClick()">نه</button>
+        </div>
+      `;
+      renderStep(html, 'step1');
+    }
+
+    function handleNoClick() {
+      noClickCount++;
+      yesScale += 0.35;
+      noScale -= 0.25;
+
+      const btnYes = document.getElementById('btnYes');
+      const btnNo = document.getElementById('btnNo');
+
+      if (noScale <= 0.1 || noClickCount >= 4) {
+        btnNo.style.display = 'none';
+        btnYes.style.transform = `scale(${yesScale})`;
+        btnYes.style.flex = "1";
+      } else {
+        btnYes.style.transform = `scale(${yesScale})`;
+        btnNo.style.transform = `scale(${noScale})`;
+        btnNo.style.opacity = noScale;
+      }
+    }
+
+    // سوال ۲: انتخاب مکان
+    function showStep2(isBack = false) {
+      const html = `
+        <h2>دوست داری کجا بریم؟ ☕🎬</h2>
+        <div class="options-grid">
+          <button class="btn" onclick="handleLocationChoice('park')">۱. پارک 🌳</button>
+          <button class="btn" onclick="handleLocationChoice('cafe')">۲. کافه ☕</button>
+          <button class="btn" onclick="handleLocationChoice('cinema')">۳. سینما 🎥</button>
+          <button class="btn" onclick="handleLocationChoice('walk')">۴. پیاده‌روی 🚶‍♂️</button>
+        </div>
+      `;
+      renderStep(html, 'step2');
+    }
+
+    // جزئیات مکان‌ها
+    function handleLocationChoice(option) {
+      if (option === 'park') {
+        const html = `
+          <h2>کدوم پارک مد نظرت هست؟ 🍃</h2>
+          <input type="text" id="parkInput" class="glass-input" placeholder="اسم پارک رو بنویس..." />
+          <button class="btn btn-yes" onclick="saveParkAndNext()">تایید و ادامه ✨</button>
+        `;
+        renderStep(html, 'subLocation');
+      } else if (option === 'cafe') {
+        const html = `
+          <h2>چی میل داری؟ 🍰☕</h2>
+          <div class="options-grid">
+            <button class="btn" onclick="saveCafeAndNext('همون همیشگی 😉')">۱. همون همیشگی 😉</button>
+            <button class="btn" onclick="saveCafeAndNext('همونجا انتخاب می‌کنم ✨')">۲. همونجا انتخاب می‌کنم ✨</button>
+          </div>
+        `;
+        renderStep(html, 'subLocation');
+      } else if (option === 'cinema') {
+        const html = `
+          <h2>متأسفانه برای شنبه هنوز بلیط و تایم مناسبی پیدا نکردم. می‌تونیم یک تایم دیگه بریم سینما :) 🍿</h2>
+          <button class="btn btn-yes" style="margin-top:15px;" onclick="showStep2()">انتخاب یک گزینه دیگه 👈</button>
+        `;
+        renderStep(html, 'subLocation');
+      } else if (option === 'walk') {
+        const html = `
+          <h2>از چه مسیر تا کجا مد نظرت هست؟ 👟</h2>
+          <input type="text" id="walkInput" class="glass-input" placeholder="مسیر پیشنهادی..." />
+          <p class="note-text">❄️ نکته: هوا هم گرمه ها، به این هم توجه کن!</p>
+          <button class="btn btn-yes" onclick="saveWalkAndNext()">تایید و ادامه ✨</button>
+        `;
+        renderStep(html, 'subLocation');
+      }
+    }
+
+    function saveParkAndNext() {
+      const val = document.getElementById('parkInput')?.value || 'پارک (بدون نام)';
+      userResponses.location = `پارک: ${val}`;
+      showStepDays();
+    }
+
+    function saveCafeAndNext(choice) {
+      userResponses.location = `کافه (${choice})`;
+      showStepDays();
+    }
+
+    function saveWalkAndNext() {
+      const val = document.getElementById('walkInput')?.value || 'مسیر پیاده‌روی مشخص نشده';
+      userResponses.location = `پیاده‌روی: ${val}`;
+      showStepDays();
+    }
+
+    // سوال ۳: روز
+    function showStepDays(isBack = false) {
+      const html = `
+        <h2>چه روزی وقت داری؟ 📅</h2>
+        <div class="options-grid">
+          <button class="btn" onclick="saveDayAndNext('شنبه')">۱. شنبه</button>
+          <button class="btn" onclick="saveDayAndNext('یکشنبه')">۲. یکشنبه</button>
+          <button class="btn" onclick="saveDayAndNext('دوشنبه')">۳. دوشنبه</button>
+          <button class="btn" onclick="saveDayAndNext('سه‌شنبه')">۴. سه‌شنبه</button>
+        </div>
+      `;
+      renderStep(html, 'stepDays');
+    }
+
+    function saveDayAndNext(day) {
+      userResponses.day = day;
+      showStepTime();
+    }
+
+    // سوال ۴: ساعت
+    function showStepTime() {
+      const html = `
+        <h2>چه تایمی خوبه بریم بیرون؟ ⏰</h2>
+        <p class="note-text" style="font-size:0.9rem; margin-bottom:12px;">(از ۹ صبح تا ۱ ظهر)</p>
+        <input type="text" id="timeInput" class="glass-input" placeholder="مثلاً: ساعت ۱۰:۳۰" />
+        <button class="btn btn-yes" onclick="submitFinalData()">ثبت نهایی 💕</button>
+      `;
+      renderStep(html, 'stepTime');
+    }
+
+    // ثبت نهایی و ارسال
+    function submitFinalData() {
+      const timeVal = document.getElementById('timeInput')?.value || 'مشخص نشده';
+      userResponses.time = timeVal;
+
+      backBtn.style.display = 'none'; // مخفی کردن دکمه بازگشت در مرحله ثبت نهایی
+
+      const loadingHtml = `
+        <div class="final-card">
+          <p>در حال ارسال اطلاعات... ⏳</p>
+        </div>
+      `;
+      renderStep(loadingHtml, 'final');
+
+      emailjs.send("service_ltzvo9f", "template_9vdzzrm", {
+        location: userResponses.location,
+        day: userResponses.day,
+        time: userResponses.time
+      })
+      .then(function(response) {
+        console.log('ارسال با موفقیت انجام شد!', response.status, response.text);
+        
+        const successHtml = `
+          <div class="final-card">
+            <p>مرسی که دعوتشو قبول کردی! 🌸</p>
+            <p style="font-size: 1rem; color: #5c5470; margin-top: 15px;">
+              قرارمون برای روز <b>${userResponses.day}</b>، حدود ساعت <b>${userResponses.time}</b> ✨
+            </p>
+          </div>
+        `;
+        renderStep(successHtml, 'final');
+      }, function(error) {
+        console.error('خطا در ارسال ایمیل:', error);
+        
+        const errorHtml = `
+          <div class="final-card">
+            <p>مرسی که پاسخ دادی! 🌸</p>
+            <p style="font-size: 0.9rem; color: #8d99ae; margin-top: 10px;">
+              (اطلاعات ثبت شد اما خطای شبکه‌ای در ارسال ایمیل رخ داد)
+            </p>
+          </div>
+        `;
+        renderStep(errorHtml, 'final');
+      });
+    }
+
+    // اجرای برنامه
+    showStep1();
+  </script>
+</body>
+</html>
